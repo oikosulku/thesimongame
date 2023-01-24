@@ -30,39 +30,28 @@ function nextSequence() {
 
     // first sequece
     if( level === 0 ) {
-
         console.log('Let the game begins');
         game = true;
-
     } 
     
     // set the correct level to title
     title.innerText = `Level ${level}`;
+
     // get the random color
-    randomChosenColour = buttonColours[getRandomNumber()];
+    randomChosenColour = buttonColours[Math.trunc( Math.random() * 3) + 1];
     // push color to the game pattern
     gamePattern.push(randomChosenColour);
 
     // reset the user index
     userIndex = 0;
 
-    console.log(`Level ${level}`);
-    console.log(gamePattern);
+    //console.log(`Level ${level}`);
+    //console.log(gamePattern);
 
-    for(let i = 0; i <= level; i++) {
-       
-        setTimeout(() => {
-            flickerTheButton(gamePattern[i]);
-          }, "1000")
-          
-    }
+    flickerTheButton(randomChosenColour);
 
 }
 
-// get random number
-function getRandomNumber() {
-    return Math.trunc( Math.random() * 3) + 1;
-}
 
 // flash the button & play the sound 
 function flickerTheButton(btn) {
@@ -103,7 +92,10 @@ function checkAnswer( color ) {
         if( userIndex + 1 === gamePattern.length ) {
             console.log('Starting next sequence');
             level++;
-            nextSequence();
+            setTimeout(() => {
+                nextSequence();
+              }, "1000")
+            
         } else {
             userIndex++;
         }
@@ -144,11 +136,10 @@ blue.addEventListener('click' , function() {
 });
 
 
-// press A to start game
+// press Any to start game
 // if game running allready, then ignore
 addEventListener('keypress', (event) => {
-    //console.log(event.key)
-    if( event.key === 'a' || event.key === 'A' ) {
-        if( game === false)  nextSequence();
-    }
+    if( game === false) {
+         nextSequence();
+    } 
 });
