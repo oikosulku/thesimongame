@@ -4,10 +4,11 @@ https://www.udemy.com/course/the-complete-web-development-bootcamp
 CCS/sounds etc. are from course materials
 all the code by Mikko Oikarinen
 */
+
+// define the vars
 let game, level,userIndex, randomChosenColour, gamePattern;
 const buttonColours = ["red", "blue", "green", "yellow"];
 
-//const userClickedPattern = [];
 
 /* BUTTONS */
 const red = document.getElementById('red');
@@ -16,6 +17,7 @@ const green = document.getElementById('green');
 const yellow = document.getElementById('yellow');
 const title = document.getElementById('level-title');
 
+// Init & reset the vars
 function init() {
     level = 0;
     userIndex = 0;
@@ -49,7 +51,6 @@ function nextSequence() {
     //console.log(gamePattern);
 
     flickerTheButton(randomChosenColour);
-
 }
 
 
@@ -63,22 +64,6 @@ function flickerTheButton(btn) {
       }, "300")
 }
 
-
-
-// USER CLICK FUNCTION
-function userClick( color ) {
-    
-    //flickerTheButton( color )
-    //auserClickedPattern.push(color);
-    document.getElementById(color).classList.toggle('pressed');
-    //audio.play();
-    setTimeout(() => {
-        document.getElementById(color).classList.toggle('pressed');
-      }, "200")
-    
-    //console.log( userClickedPattern );
-    checkAnswer(color);
-}
 
 // Compare game pattern & user clicked pattern
 function checkAnswer( color ) {
@@ -120,26 +105,27 @@ function checkAnswer( color ) {
     
 // BUTTON LISTENERS
 green.addEventListener('click' , function() {
-    if(game) userClick('green');
+    if(game) checkAnswer('green');
 });
 
 red.addEventListener('click' , function() {
-    if(game) userClick('red');
+    if(game) checkAnswer('red');
 });
 
 yellow.addEventListener('click' , function() {
-    if(game) userClick('yellow');
+    if(game) checkAnswer('yellow');
 });
 
 blue.addEventListener('click' , function() {
-    if(game) userClick('blue');
+    if(game) checkAnswer('blue');
 });
-
 
 // press Any to start game
 // if game running allready, then ignore
 addEventListener('keypress', (event) => {
     if( game === false) {
-         nextSequence();
+        setTimeout(() => {
+            nextSequence();
+          }, "1000")
     } 
 });
