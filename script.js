@@ -6,6 +6,7 @@ all the code by Mikko Oikarinen
 */
 let game = false;
 let level = 0;
+let userIndex = 0;
 const buttonColours = ["red", "blue", "green", "yellow"];
 let randomChosenColour;
 const gamePattern = [];
@@ -28,25 +29,30 @@ function nextSequence() {
 
         console.log('Let the game begins');
         game = true;
-        
-    // next sequence
-    } else {
-        
-        console.log('next sequence');
 
-    }
-
+    } 
+    
     // set the correct level to title
     title.innerText = `Level ${level}`;
     // get the random color
     randomChosenColour = buttonColours[getRandomNumber()];
     // push color to the game pattern
     gamePattern.push(randomChosenColour);
-    // flicker the button
-    flickerTheButton(randomChosenColour);
-    
-    //console.log(gamePattern)
-   
+
+    // reset the user index
+    userIndex = 0;
+
+    console.log(`Level ${level}`);
+    console.log(gamePattern);
+
+    for(let i = 0; i <= level; i++) {
+       
+        setTimeout(() => {
+            flickerTheButton(gamePattern[i]);
+          }, "1000")
+          
+    }
+
 }
 
 // get random number
@@ -57,11 +63,11 @@ function getRandomNumber() {
 // flash the button & play the sound 
 function flickerTheButton(btn) {
     let audio = new Audio(`sounds/${btn}.mp3`);
+    audio.play();
     document.getElementById(btn).classList.toggle('pressed');
-    //audio.play();
     setTimeout(() => {
         document.getElementById(btn).classList.toggle('pressed');
-      }, "200")
+      }, "300")
 }
 
 
@@ -69,48 +75,54 @@ function flickerTheButton(btn) {
 // USER CLICK FUNCTION
 function userClick( color ) {
     
-    userClickedPattern.push(color);
+    //auserClickedPattern.push(color);
     document.getElementById(color).classList.toggle('pressed');
     //audio.play();
     setTimeout(() => {
         document.getElementById(color).classList.toggle('pressed');
       }, "200")
     
-    console.log( userClickedPattern );
-
-    
-    checkAnswer();
+    //console.log( userClickedPattern );
+    checkAnswer(color);
 }
 
 // Compare game pattern & user clicked pattern
-function checkAnswer() {
+function checkAnswer( color ) {
 
-    for(let i = 0; i <= level; i++) {
-        if(userClickedPattern[i] !== gamePattern[i] ) {
-            console.log('wrong');
+    console.log('userindex', userIndex);
+    // check if clicked color match in correct game pattern index
+    if( color === gamePattern[userIndex] ) {
+        if( userIndex + 1 === gamePattern.length ) {
+            console.log('Starting next sequence');
+            level++;
+            nextSequence();
         } else {
-            console.log('correct');
+            userIndex++;
         }
-    }
 
-    // wrong answer
+    // no match - end the game
+    } else {
+        console.log('end the game');
+        game = false;
+        title.innerText = 'Game Over, Press Any key to Restart';
+    }
 }
     
 // BUTTON LISTENERS
 green.addEventListener('click' , function() {
-    userClick('green');
+    if(game) userClick('green');
 });
 
 red.addEventListener('click' , function() {
-    userClick('red');
+    if(game) userClick('red');
 });
 
 yellow.addEventListener('click' , function() {
-    userClick('yellow');
+    if(game) userClick('yellow');
 });
 
 blue.addEventListener('click' , function() {
-    userClick('blue');
+    if(game) userClick('blue');
 });
 
 
