@@ -4,13 +4,10 @@ https://www.udemy.com/course/the-complete-web-development-bootcamp
 CCS/sounds etc. are from course materials
 all the code by Mikko Oikarinen
 */
-let game = false;
-let level = 0;
-let userIndex = 0;
+let game, level,userIndex, randomChosenColour, gamePattern;
 const buttonColours = ["red", "blue", "green", "yellow"];
-let randomChosenColour;
-const gamePattern = [];
-const userClickedPattern = [];
+
+//const userClickedPattern = [];
 
 /* BUTTONS */
 const red = document.getElementById('red');
@@ -19,7 +16,14 @@ const green = document.getElementById('green');
 const yellow = document.getElementById('yellow');
 const title = document.getElementById('level-title');
 
+function init() {
+    level = 0;
+    userIndex = 0;
+    game = false;
+    gamePattern = [];
+}
 
+init();
 
 // START THE GAME
 function nextSequence() {
@@ -63,8 +67,8 @@ function getRandomNumber() {
 // flash the button & play the sound 
 function flickerTheButton(btn) {
     let audio = new Audio(`sounds/${btn}.mp3`);
-    audio.play();
     document.getElementById(btn).classList.toggle('pressed');
+    audio.play();
     setTimeout(() => {
         document.getElementById(btn).classList.toggle('pressed');
       }, "300")
@@ -75,6 +79,7 @@ function flickerTheButton(btn) {
 // USER CLICK FUNCTION
 function userClick( color ) {
     
+    //flickerTheButton( color )
     //auserClickedPattern.push(color);
     document.getElementById(color).classList.toggle('pressed');
     //audio.play();
@@ -92,6 +97,9 @@ function checkAnswer( color ) {
     console.log('userindex', userIndex);
     // check if clicked color match in correct game pattern index
     if( color === gamePattern[userIndex] ) {
+
+        flickerTheButton(color);
+
         if( userIndex + 1 === gamePattern.length ) {
             console.log('Starting next sequence');
             level++;
@@ -103,7 +111,17 @@ function checkAnswer( color ) {
     // no match - end the game
     } else {
         console.log('end the game');
-        game = false;
+        init();
+
+        let audio = new Audio(`sounds/wrong.mp3`);
+        audio.play();
+
+        document.body.classList.toggle('game-over');
+        //audio.play();
+        setTimeout(() => {
+            document.body.classList.toggle('game-over');
+          }, "200")
+        
         title.innerText = 'Game Over, Press Any key to Restart';
     }
 }
